@@ -26,7 +26,7 @@ const ContactForm: FC<ContactFormProps> = ({ dispatch }) => {
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("contact: ", contact);
-    dispatch({ type: "ADD_CONTACT", payload: contact });
+    dispatch({ type: "ADD_CONTACT", payload: { id: Date.now(), ...contact } });
   };
 
   return (
