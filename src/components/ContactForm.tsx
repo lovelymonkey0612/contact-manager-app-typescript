@@ -1,7 +1,12 @@
 import React, { FC, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { Action } from "../reducer/ContactsReducer";
 
-const ContactForm: FC = () => {
+interface ContactFormProps {
+  dispatch: React.Dispatch<Action>;
+}
+
+const ContactForm: FC<ContactFormProps> = ({ dispatch }) => {
   const [contact, setContact] = useState({
     firstName: "",
     lastName: "",
@@ -21,6 +26,7 @@ const ContactForm: FC = () => {
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("contact: ", contact);
+    dispatch({ type: "ADD_CONTACT", payload: contact });
   };
 
   return (
