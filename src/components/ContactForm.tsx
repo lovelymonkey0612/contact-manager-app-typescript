@@ -1,20 +1,27 @@
 import React, { FC, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Action } from "../reducer/ContactsReducer";
+import { Action, Contact } from "../reducer/ContactsReducer";
 
 interface ContactFormProps {
   dispatch: React.Dispatch<Action>;
+  dataToEdit: Contact | undefined;
+  toogleModal: () => void;
 }
 
-const ContactForm: FC<ContactFormProps> = ({ dispatch }) => {
+const ContactForm: FC<ContactFormProps> = ({
+  dispatch,
+  dataToEdit,
+  toggleModal,
+}) => {
   const [contact, setContact] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
+    firstName: dataToEdit?.firstName ? dataToEdit.firstName : "",
+    lastName: dataToEdit?.lastName ? dataToEdit.phone : "",
+    phone: dataToEdit?.phone ? dataToEdit.phone : "",
   });
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+
     setContact((prevState) => {
       return {
         ...prevState,
@@ -26,7 +33,29 @@ const ContactForm: FC<ContactFormProps> = ({ dispatch }) => {
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("contact: ", contact);
-    dispatch({ type: "ADD_CONTACT", payload: { id: Date.now(), ...contact } });
+    if (!dataToEdit) {
+      dispatch({
+        type: "ADD_CONTACT",
+        payload: { id: Date.now(), ...contact },
+      });
+      setContact({
+        firstName: "",
+        lastName: "",
+        phone: "",
+      });
+    } else {
+      dispatch({
+        type: "UPDATE_CONTACT",
+        payload: {
+          id: dataToEdit.id,
+          updates: {
+            id: Date.now(),
+            ...contact,
+          },
+        },
+      });
+      toggleModal();
+    }
   };
 
   return (
@@ -63,7 +92,7 @@ const ContactForm: FC<ContactFormProps> = ({ dispatch }) => {
       </Form.Group>
       <Form.Group controlId="submit">
         <Button variant="primary" type="submit" className="submit-btn">
-          Add Contact
+          {dataToEdit ? "Update Contact" : "Add Contact"}
         </Button>
       </Form.Group>
     </Form>
