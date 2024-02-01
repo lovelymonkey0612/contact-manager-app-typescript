@@ -33,6 +33,10 @@ const ContactItem: FC<Contact & ExtraProps> = ({
             );
             if (confirmDelete) {
               // dispatch action
+              dispatch({
+                type: "DELETE_CONTACT",
+                payload: { id },
+              });
             }
           }}
         />

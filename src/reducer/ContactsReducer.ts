@@ -7,11 +7,11 @@ export interface Contact {
 
 export interface Update {
   id: number;
-  updates: Contact;
+  updates?: Contact;
 }
 
 export interface Action {
-  type: "ADD_CONTACT" | "UPDATE_CONTACT";
+  type: "ADD_CONTACT" | "UPDATE_CONTACT" | "DELETE_CONTACT";
   payload: Contact | Update;
 }
 
@@ -40,6 +40,13 @@ export const contactsReducer = (state: State, action: Action): State => {
           return contact;
         }),
       };
+    case "DELETE_CONTACT": {
+      const { id } = action.payload;
+      return {
+        ...state,
+        contacts: state.contacts.filter((contact) => contact.id !== id),
+      };
+    }
     default:
       return state;
   }
