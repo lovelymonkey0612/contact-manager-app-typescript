@@ -5,7 +5,7 @@ import { Action, Contact } from "../reducer/ContactsReducer";
 interface ContactFormProps {
   dispatch: React.Dispatch<Action>;
   dataToEdit: Contact | undefined;
-  toogleModal: () => void;
+  toggleModal: () => void;
 }
 
 const ContactForm: FC<ContactFormProps> = ({
